@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Birthday Wishlist</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #cfd8e3;
+      --accent: #7c3aed;
+      --accent-2: #a78bfa;
+      --success: #10b981;
+      --danger: #9ca3af;
+      --shadow: 0 10px 30px rgba(31, 41, 55, 0.10);
+      --shadow-hover: 0 20px 45px rgba(31, 41, 55, 0.16);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 55%, #eef2f7 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      min-height: 100vh;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(207, 216, 227, 0.8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 18px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+
+    .sidebar h1 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    .sidebar p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .section {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .section:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d7dee8;
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+      margin-bottom: 12px;
+    }
+
+    input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.18s ease, opacity 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+    }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: #4c1d95;
+    }
+
+    .btn-danger {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .hint,
+    .status {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .status {
+      margin-top: 10px;
+      min-height: 22px;
+    }
+
+    .manual-fields {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 16px;
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+    }
+
+    .manual-fields.hidden {
+      display: none;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.15rem;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      overflow: hidden;
+      min-height: 760px;
+      padding: 16px;
+    }
+
+    .radial-board {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 728px;
+      border-radius: calc(var(--radius) + 6px);
+      background:
+        radial-gradient(circle at center, rgba(124, 58, 237, 0.06) 0%, rgba(124, 58, 237, 0.03) 18%, transparent 19%),
+        radial-gradient(circle at center, rgba(124, 58, 237, 0.035) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.82));
+      border: 1px solid rgba(229, 231, 235, 0.85);
+    }
+
+    .board-title {
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      z-index: 3;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .line-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .center-node {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 210px;
+      height: 210px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff, #f3e8ff);
+      border: 2px solid rgba(167, 139, 250, 0.45);
+      box-shadow: 0 18px 40px rgba(124, 58, 237, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    .center-node h2 {
+      margin: 0;
+      font-size: 1.55rem;
+      line-height: 1.15;
+    }
+
+    .center-node p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .gift-node {
+      position: absolute;
+      width: 150px;
+      min-height: 150px;
+      transform: translate(-50%, -50%) scale(1);
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      box-shadow: var(--shadow);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
+      overflow: hidden;
+    }
+
+    .gift-node:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .gift-node.reserved {
+      opacity: 0.72;
+      filter: grayscale(1);
+    }
+
+    .gift-inner {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .gift-image {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #f3f4f6;
+      border: 2px solid #eef2f7;
+      flex-shrink: 0;
+    }
+
+    .gift-name {
+      font-size: 0.83rem;
+      font-weight: 700;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      max-width: 115px;
+    }
+
+    .gift-price {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .gift-buttons {
+      display: flex;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .gift-btn {
+      font-size: 0.72rem;
+      padding: 7px 9px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .gift-btn.reserve {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    .gift-btn.unreserve {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .gift-btn.remove {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .reserved-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(156, 163, 175, 0.38);
+      z-index: 3;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gift-node.reserved .reserved-overlay {
+      display: flex;
+    }
+
+    .reserved-x {
+      font-size: 5rem;
+      line-height: 1;
+      color: rgba(107, 114, 128, 0.92);
+      font-weight: 300;
+      transform: rotate(-8deg);
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+      user-select: none;
+    }
+
+    .empty-state {
+      position: absolute;
+      left: 50%;
+      top: 18%;
+      transform: translateX(-50%);
+      z-index: 2;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #e5e7eb;
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      text-align: center;
+      max-width: 320px;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .link-preview {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1100px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+
+      .canvas-wrap {
+        min-height: 720px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding: 12px;
+        gap: 12px;
+      }
+
+      .sidebar {
+        padding: 14px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .canvas-wrap {
+        padding: 10px;
+        min-height: 680px;
+      }
+
+      .radial-board {
+        min-height: 660px;
+      }
+
+      .center-node {
+        width: 160px;
+        height: 160px;
+        padding: 16px;
+      }
+
+      .center-node h2 {
+        font-size: 1.2rem;
+      }
+
+      .center-node p {
+        font-size: 0.82rem;
+      }
+
+      .gift-node {
+        width: 118px;
+        min-height: 118px;
+        padding: 8px;
+      }
+
+      .gift-image {
+        width: 46px;
+        height: 46px;
+      }
+
+      .gift-name {
+        max-width: 94px;
+        font-size: 0.72rem;
+      }
+
+      .gift-price {
+        font-size: 0.74rem;
+      }
+
+      .gift-btn {
+        font-size: 0.64rem;
+        padding: 6px 8px;
+      }
+
+      .reserved-x {
+        font-size: 3.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <aside class="panel sidebar">
+      <div class="section">
+        <h1>Birthday Gift Wishlist</h1>
+        <p>Paste a product link to add a gift, then share this single page so visitors can reserve items and avoid duplicates.</p>
+      </div>
+
+      <div class="section">
+        <label for="productUrl">Product URL</label>
+        <input id="productUrl" type="url" placeholder="[amazon.co.uk](https://www.amazon.co.uk/) or [argos.co.uk](https://www.argos.co.uk/)" />
+
+        <div class="actions">
+          <button id="extractBtn" class="btn-primary">Add from URL</button>
+          <button id="toggleManualBtn" class="btn-secondary" type="button">Manual entry</button>
+        </div>
+
+        <div id="status" class="status"></div>
+        <div id="linkPreview" class="link-preview" style="display:none;"></div>
+
+        <div id="manualFields" class="manual-fields hidden">
+          <input id="manualName" type="text" placeholder="Gift name" />
+          <input id="manualImage" type="url" placeholder="Image URL" />
+          <input id="manualPrice" type="text" placeholder="Price e.g. £29.99" />
+          <button id="manualAddBtn" class="btn-primary btn-full" type="button">Add gift manually</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="stats">
+          <div class="stat">
+            <strong id="totalCount">0</strong>
+            <span>Total gifts</span>
+          </div>
+          <div class="stat">
+            <strong id="reservedCount">0</strong>
+            <span>Reserved</span>
+          </div>
+          <div class="stat">
+            <strong id="availableCount">0</strong>
+            <span>Available</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="actions">
+          <button id="seedBtn" class="btn-secondary" type="button">Add demo gifts</button>
+          <button id="clearBtn" class="btn-danger" type="button">Clear all</button>
+        </div>
+        <p class="footer-note">
+          Reservations are stored in the browser. A reserved gift can only be unreserved by the same browser/device that reserved it.
+        </p>
+      </div>
+    </aside>
+
+    <main class="panel canvas-wrap">
+      <div class="radial-board" id="radialBoard">
+        <div class="board-title">Spider diagram wishlist</div>
+
+        <svg class="line-layer" id="lineLayer" aria-hidden="true"></svg>
+
+        <div class="center-node" id="centerNode">
+          <div>
+            <h2>My Birthday Wishlist</h2>
+            <p>Reserve a gift so nobody buys it twice</p>
+          </div>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          Add your first gift using a product link or manual entry.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "birthday-wishlist-items";
+    const DEVICE_KEY = "birthday-wishlist-device-id";
+
+    const productUrlInput = document.getElementById("productUrl");
+    const extractBtn = document.getElementById("extractBtn");
+    const toggleManualBtn = document.getElementById("toggleManualBtn");
+    const manualFields = document.getElementById("manualFields");
+    const manualName = document.getElementById("manualName");
+    const manualImage = document.getElementById("manualImage");
+    const manualPrice = document.getElementById("manualPrice");
+    const manualAddBtn = document.getElementById("manualAddBtn");
+    const statusEl = document.getElementById("status");
+    const linkPreview = document.getElementById("linkPreview");
+
+    const radialBoard = document.getElementById("radialBoard");
+    const lineLayer = document.getElementById("lineLayer");
+    const centerNode = document.getElementById("centerNode");
+    const emptyState = document.getElementById("emptyState");
+
+    const totalCount = document.getElementById("totalCount");
+    const reservedCount = document.getElementById("reservedCount");
+    const availableCount = document.getElementById("availableCount");
+
+    const seedBtn = document.getElementById("seedBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    let items = loadItems();
+    const deviceId = getOrCreateDeviceId();
+
+    function getOrCreateDeviceId() {
+      let id = localStorage.getItem(DEVICE_KEY);
+      if (!id) {
+        id = crypto.randomUUID ? crypto.randomUUID() : "device-" + Math.random().toString(36).slice(2);
+        localStorage.setItem(DEVICE_KEY, id);
+      }
+      return id;
+    }
+
+    function loadItems() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveItems() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.style.color = isError ? "#b91c1c" : "#6b7280";
+    }
+
+    function sanitizeText(text) {
+      return (text || "")
+        .replace(/\s+/g, " ")
+        .replace(/[|]+.*$/g, "")
+        .replace(/[-]+.*$/g, (m) => m.length > 2 ? "" : m)
+        .trim();
+    }
+
+    function extractNameFromUrl(url) {
+      try {
+        const u = new URL(url);
+        const path = decodeURIComponent(u.pathname)
+          .replace(/\/+/g, "/")
+          .replace(/[-_]/g, " ")
+          .replace(/\b(dp|gp|product|products|itm|p)\b/gi, "")
+          .replace(/[0-9A-Z]{8,}/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+
+        const segments = path.split("/").filter(Boolean).reverse();
+        const best = segments.find(s => /[a-zA-Z]/.test(s)) || u.hostname.replace(/^www\./, "");
+        return titleCase(sanitizeText(best));
+      } catch {
+        return "";
+      }
+    }
+
+    function titleCase(str) {
+      return str
+        .toLowerCase()
+        .split(" ")
+        .filter(Boolean)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+
+    function formatPrice(value) {
+      if (!value) return "";
+      const str = String(value).trim();
+      if (/^[£$€]/.test(str)) return str;
+      const num = Number(str.replace(/[^\d.]/g, ""));
+      if (!isNaN(num) && num > 0) return "£" + num.toFixed(2);
+      return str;
+    }
+
+    function placeholderImage(label = "Gift") {
+      const text = encodeURIComponent(label.slice(0, 18) || "Gift");
+      return `data:image/svg+xml;utf8,
+        <svg xmlns="[w3.org](http://www.w3.org/2000/svg)" width="200" height="200">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop stop-color="%23ede9fe" offset="0"/>
+              <stop stop-color="%23f5f3ff" offset="1"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" rx="100" fill="url(%23g)"/>
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+            fill="%236b7280" font-family="Arial, sans-serif" font-size="20">${text}</text>
+        </svg>`;
+    }
+
+    async function tryFetchMetadata(url) {
+      const endpoints = [
+        `[r.jina.ai](https://r.jina.ai/http://${url.replace(/^https?:\/\//) "")}`,
+        `[r.jina.ai](https://r.jina.ai/http://r.jina.ai/http://${url.replace(/^https?:\/\//) "")}`
+      ];
+
+      for (const endpoint of endpoints) {
+        try {
+          const res = await fetch(endpoint);
+          if (!res.ok) continue;
+          const text = await res.text();
+          const parsed = parseMetadataFromText(text, url);
+          if (parsed.name || parsed.price || parsed.image) {
+            return parsed;
+          }
+        } catch {
+        }
+      }
+
+      return null;
+    }
+
+    function parseMetadataFromText(text, url) {
+      const result = {
+        name: "",
+        image: "",
+        price: ""
+      };
+
+      const titleMatch = text.match(/<title[^>]*>(.*?)<\/title>/i) || text.match(/title:\s*(.+)/i);
+      const ogTitleMatch = text.match(/property=["']og:title["'][^>]*content=["']([^"']+)["']/i);
+      const imageMatch = text.match(/property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+                         text.match(/https?:\/\/[^\s"'<>]+?\.(?:jpg|jpeg|png|webp)/i);
+
+      const pricePatterns = [
+        /£\s?\d{1,4}(?:[.,]\d{2})?/,
+        /\$\s?\d{1,4}(?:[.,]\d{2})?/,
+        /€\s?\d{1,4}(?:[.,]\d{2})?/
+      ];
+
+      result.name = sanitizeText((ogTitleMatch && ogTitleMatch[1]) || (titleMatch && titleMatch[1]) || extractNameFromUrl(url));
+
+      for (const pattern of pricePatterns) {
+        const match = text.match(pattern);
+        if (match) {
+          result.price = match[0].replace(/\s+/g, "");
+          break;
+        }
+      }
+
+      if (imageMatch) {
+        result.image = imageMatch[1] || imageMatch[0];
+      }
+
+      if (!result.image) {
+        result.image = guessImageFromRetailer(url);
+      }
+
+      return result;
+    }
+
+    function guessImageFromRetailer(url) {
+      try {
+        const u = new URL(url);
+        if (u.hostname.includes("amazon")) return placeholderImage("Amazon Gift");
+        if (u.hostname.includes("argos")) return placeholderImage("Argos Gift");
+        return "";
+      } catch {
+        return "";
+      }
+    }
+
+    function buildItem({ name, image, price, url }) {
+      return {
+        id: crypto.randomUUID ? crypto.randomUUID() : "gift-" + Math.random().toString(36).slice(2),
+        name: sanitizeText(name) || "Untitled Gift",
+        image: image || placeholderImage(name || "Gift"),
+        price: formatPrice(price) || "Price not set",
+        url: url || "",
+        reserved: false,
+        reservedBy: null,
+        createdAt: Date.now()
+      };
+    }
+
+    function addItem(item) {
+      items.push(item);
+      saveItems();
+      render();
+      broadcastUpdate();
+    }
+
+    function reserveItem(id) {
+      const item = items.find(x => x.id === id);
+      if (!item || item.reserved) return;
+
+      item.reserved = true;
+      item.reservedBy = deviceId;
+      saveItems();
+      render();
+      broadcastUpdate();
+    }
+
+    function unreserveItem(id) {
+      const item = items.find(x => x.id === id);
+      if (!item || !item.reserved) return;
+      if (item.reservedBy !== deviceId) return;
+
+      item.reserved = false;
+      item.reservedBy = null;
+      saveItems();
+      render();
+      broadcastUpdate();
+    }
+
+    function removeItem(id) {
+      items = items.filter(x => x.id !== id);
+      saveItems();
+      render();
+      broadcastUpdate();
+    }
+
+    function canUnreserve(item) {
+      return item.reserved && item.reservedBy === deviceId;
+    }
+
+    function updateStats() {
+      const total = items.length;
+      const reserved = items.filter(i => i.reserved).length;
+      totalCount.textContent = total;
+      reservedCount.textContent = reserved;
+      availableCount.textContent = total - reserved;
+    }
+
+    function clearGiftNodes() {
+      radialBoard.querySelectorAll(".gift-node").forEach(node => node.remove());
+      while (lineLayer.firstChild) {
+        lineLayer.removeChild(lineLayer.firstChild);
+      }
+    }
+
+    function drawLine(x1, y1, x2, y2) {
+      const line = document.createElementNS("[w3.org](http://www.w3.org/2000/svg)", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#cfd8e3");
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("stroke-linecap", "round");
+      line.setAttribute("opacity", "0.95");
+      lineLayer.appendChild(line);
+    }
+
+    function getBoardMetrics() {
+      const rect = radialBoard.getBoundingClientRect();
+      const mobile = window.innerWidth < 700;
+
+      return {
+        width: rect.width,
+        height: rect.height,
+        centerX: rect.width / 2,
+        centerY: rect.height / 2,
+        radius: Math.max(
+          145,
+          Math.min(rect.width, rect.height) * (mobile ? 0.34 : 0.36)
+        ),
+        nodeSize: mobile ? 118 : 150
+      };
+    }
+
+    function positionItems() {
+      clearGiftNodes();
+      updateStats();
+
+      emptyState.style.display = items.length ? "none" : "block";
+
+      const { width, height, centerX, centerY, radius, nodeSize } = getBoardMetrics();
+      lineLayer.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      lineLayer.setAttribute("width", width);
+      lineLayer.setAttribute("height", height);
+
+      if (!items.length) return;
+
+      const count = items.length;
+      const angleStep = (Math.PI * 2) / count;
+      const jitter = count > 8 ? 10 : 0;
+
+      items.forEach((item, index) => {
+        const angle = (-Math.PI / 2) + (index * angleStep);
+        const ringOffset = count > 10 && index % 2 === 0 ? 28 : 0;
+        const r = radius + ringOffset;
+        const x = centerX + Math.cos(angle) * r;
+        const y = centerY + Math.sin(angle) * r + (jitter ? ((index % 3) - 1) * jitter : 0);
+
+        drawLine(centerX, centerY, x, y);
+
+        const node = document.createElement("div");
+        node.className = "gift-node" + (item.reserved ? " reserved" : "");
+        node.style.left = `${x}px`;
+        node.style.top = `${y}px`;
+        node.style.width = `${nodeSize}px`;
+        node.style.minHeight = `${nodeSize}px`;
+
+        const reserveDisabled = item.reserved ? "disabled" : "";
+        const showUnreserve = canUnreserve(item);
+
+        node.innerHTML = `
+          <div class="gift-inner">
+            <img class="gift-image" src="${escapeHtmlAttr(item.image)}" alt="${escapeHtmlAttr(item.name)}" />
+            <div class="gift-name" title="${escapeHtmlAttr(item.name)}">${escapeHtml(item.name)}</div>
+            <div class="gift-price">${escapeHtml(item.price)}</div>
+            <div class="gift-buttons">
+              ${!item.reserved ? `<button class="gift-btn reserve" data-action="reserve" data-id="${item.id}" ${reserveDisabled}>Reserve</button>` : ""}
+              ${showUnreserve ? `<button class="gift-btn unreserve" data-action="unreserve" data-id="${item.id}">Undo</button>` : ""}
+              <button class="gift-btn remove" data-action="remove" data-id="${item.id}" title="Remove gift">Delete</button>
+            </div>
+          </div>
+          <div class="reserved-overlay">
+            <div class="reserved-x">×</div>
+          </div>
+        `;
+
+        if (item.url) {
+          node.title = item.url;
+          node.style.cursor = "pointer";
+          node.addEventListener("dblclick", () => {
+            window.open(item.url, "_blank", "noopener,noreferrer");
+          });
+        }
+
+        radialBoard.appendChild(node);
+      });
+    }
+
+    function render() {
+      positionItems();
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeHtmlAttr(str) {
+      return escapeHtml(str);
+    }
+
+    function showManual(prefill = {}) {
+      manualFields.classList.remove("hidden");
+      if (prefill.name) manualName.value = prefill.name;
+      if (prefill.image) manualImage.value = prefill.image;
+      if (prefill.price) manualPrice.value = prefill.price;
+    }
+
+    function hideManual() {
+      manualFields.classList.add("hidden");
+    }
+
+    async function handleExtract() {
+      const url = productUrlInput.value.trim();
+      if (!url) {
+        setStatus("Paste a product URL first.", true);
+        return;
+      }
+
+      setStatus("Extracting product details...");
+      linkPreview.style.display = "block";
+      linkPreview.textContent = url;
+
+      const guessedName = extractNameFromUrl(url);
+
+      try {
+        const metadata = await tryFetchMetadata(url);
+        const name = metadata?.name || guessedName || "Gift item";
+        const image = metadata?.image || placeholderImage(name);
+        const price = metadata?.price || "";
+
+        if (metadata && (metadata.name || metadata.image || metadata.price)) {
+          addItem(buildItem({ name, image, price, url }));
+          productUrlInput.value = "";
+          setStatus("Gift added from link.");
+          return;
+        }
+
+        showManual({
+          name,
+          image: image && !image.startsWith("data:image") ? image : "",
+          price
+        });
+        setStatus("Automatic extraction was limited. Complete the manual fields to finish.", false);
+      } catch {
+        showManual({
+          name: guessedName || "",
+          image: "",
+          price: ""
+        });
+        setStatus("Could not extract details automatically. Use manual entry below.", true);
+      }
+    }
+
+    function handleManualAdd() {
+      const url = productUrlInput.value.trim();
+      const name = manualName.value.trim();
+      const image = manualImage.value.trim();
+      const price = manualPrice.value.trim();
+
+      if (!name) {
+        setStatus("Enter a gift name.", true);
+        return;
+      }
+
+      addItem(buildItem({ name, image, price, url }));
+      manualName.value = "";
+      manualImage.value = "";
+      manualPrice.value = "";
+      productUrlInput.value = "";
+      hideManual();
+      setStatus("Gift added manually.");
+    }
+
+    function addDemoData() {
+      if (items.length) {
+        setStatus("Demo gifts were not added because the wishlist already has items.");
+        return;
+      }
+
+      const demo = [
+        {
+          name: "LEGO Star Wars Set",
+          image: "[images.unsplash.com](https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=300&q=80)",
+          price: "£44.99",
+          url: "[example.com](https://example.com/lego)"
+        },
+        {
+          name: "Noise Cancelling Headphones",
+          image: "[images.unsplash.com](https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80)",
+          price: "£89.99",
+          url: "[example.com](https://example.com/headphones)"
+        },
+        {
+          name: "Coffee Grinder",
+          image: "[images.unsplash.com](https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=300&q=80)",
+          price: "£32.00",
+          url: "[example.com](https://example.com/grinder)"
+        },
+        {
+          name: "Running Watch",
+          image: "[images.unsplash.com](https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=300&q=80)",
+          price: "£119.00",
+          url: "[example.com](https://example.com/watch)"
+        },
+        {
+          name: "Cookbook",
+          image: "[images.unsplash.com](https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=300&q=80)",
+          price: "£18.99",
+          url: "[example.com](https://example.com/book)"
+        },
+        {
+          name: "Desk Lamp",
+          image: "[images.unsplash.com](https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=300&q=80)",
+          price: "£25.50",
+          url: "[example.com](https://example.com/lamp)"
+        }
+      ];
+
+      items = demo.map(buildItem);
+      saveItems();
+      render();
+      broadcastUpdate();
+      setStatus("Demo gifts added.");
+    }
+
+    function clearAll() {
+      if (!confirm("Clear the whole wishlist?")) return;
+      items = [];
+      saveItems();
+      render();
+      broadcastUpdate();
+      setStatus("Wishlist cleared.");
+    }
+
+    radialBoard.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-action]");
+      if (!btn) return;
+
+      const { action, id } = btn.dataset;
+      if (action === "reserve") reserveItem(id);
+      if (action === "unreserve") unreserveItem(id);
+      if (action === "remove") removeItem(id);
+    });
+
+    extractBtn.addEventListener("click", handleExtract);
+    manualAddBtn.addEventListener("click", handleManualAdd);
+
+    toggleManualBtn.addEventListener("click", () => {
+      manualFields.classList.toggle("hidden");
+      setStatus(manualFields.classList.contains("hidden") ? "" : "Manual entry is open.");
+    });
+
+    seedBtn.addEventListener("click", addDemoData);
+    clearBtn.addEventListener("click", clearAll);
+
+    window.addEventListener("resize", render);
+
+    window.addEventListener("storage", (e) => {
+      if (e.key === STORAGE_KEY) {
+        items = loadItems();
+        render();
+      }
+    });
+
+    function broadcastUpdate() {
+      localStorage.setItem("birthday-wishlist-last-update", String(Date.now()));
+    }
+
+    productUrlInput.addEventListener("input", () => {
+      const value = productUrlInput.value.trim();
+      linkPreview.style.display = value ? "block" : "none";
+      linkPreview.textContent = value;
+    });
+
+    render();
+  </script>
+</body>
+</html>
